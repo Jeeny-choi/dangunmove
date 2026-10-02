@@ -171,7 +171,7 @@
         <p class="event-label">개천절 연휴 추첨이벤트</p>
         <p class="event-date">2026.10.03 – 10.05</p>
         <h1 class="hero-title">하늘이 열린 날,<span class="line2">MOVE도 열자!</span></h1>
-        <p class="hero-desc">연휴 동안 MOVE·R튜브를 학습하고<br/>커피쿠폰 추첨에 참여하세요.</p>
+        <p class="hero-desc">연휴 동안 MOVE·R튜브를 학습하고<br/>카케어 소모품 할인권(2만원) 추첨에 참여하세요.</p>
       </div>
 
       <div class="chev-row" aria-label="추첨 구간">
@@ -180,7 +180,7 @@
         <div class="chev on now"><span class="c-cond">120분 이상</span><span class="c-name">2시간</span><span class="c-prize"><span id="prize-full">300</span>명</span></div>
       </div>
 
-      <p class="landing-note">많이 학습할수록 당첨 인원이 커져요<br/>총 <strong id="prize-total">500명</strong> 커피쿠폰 추첨</p>
+      <p class="landing-note">많이 학습할수록 당첨 인원이 커져요<br/>총 <strong id="prize-total">500명</strong> 카케어쿠폰 추첨</p>
       <p class="scope-note">연휴 3일(10/3~10/5)간 MOVE R튜브+정규코스 학습시간을 합산하며, 달성구간별 추첨합니다. (학습할수록 당첨확률 UP!)</p>
 
       <button class="cta-primary" id="btn-to-lookup">내 학습시간 확인하기</button>
@@ -292,11 +292,12 @@ var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
   }
 
   var asofEl = $('data-asof');
+  var dataReady = false; // 학습데이터가 한 번이라도 올라왔는지
   (async function(){
     try{
       var rows = await rpc('hangawi_meta_get');
       if(rows && rows.length){
-        if(rows[0].data_as_of) asofEl.textContent = '학습실적 기준: ' + rows[0].data_as_of;
+        if(rows[0].data_as_of){ dataReady = true; asofEl.textContent = '학습실적 기준: ' + rows[0].data_as_of; }
         if(rows[0].results_open === true) showResultsOpen();
       }
     }catch(e){ asofEl.textContent=''; }
@@ -326,7 +327,7 @@ var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
     btn.disabled = true; var label = btn.textContent; btn.textContent='확인하는 중...';
     try{
       var rows = await rpc('hangawi_lookup', { p_id: raw });
-      if(!rows || !rows.length){ showError(); return; }
+      if(!rows || !rows.length){ showError(dataReady ? '' : '아직 데이터가 반영되지 않았습니다.'); return; }
       var r = rows[0];
       if(r.data_as_of) asofEl.textContent = '학습실적 기준: ' + r.data_as_of;
       renderResult({ id:raw, name:r.member_name||'', min:r.minutes||0,
