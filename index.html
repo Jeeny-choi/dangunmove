@@ -396,11 +396,12 @@ var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
       banner.classList.remove('hidden');
       prizeText.textContent='';
       var head=document.createElement('span'); head.className='prize-head';
-      var sub=document.createElement('span'); sub.className='prize-sub';
+      var sub=document.createElement('span'); sub.className='prize-sub'; var sub2=null;
       if(rec.isWinner){
         var g = rec.winGrade || TIER_NAME[tier] || '';
         head.textContent='🎉 축하합니다! ' + (g ? g + ' 구간 추첨에 ' : '') + '당첨되셨어요!';
-        sub.textContent = rec.prize ? ('경품: ' + rec.prize) : '';
+        sub.textContent = '경품: 카케어소모품 할인권(2만원)';
+        sub2=document.createElement('span'); sub2.className='prize-sub'; sub2.textContent='* 금주중 문자로 발송 예정';
         banner.classList.add('is-winner');
       }else if(tier==='new'){
         head.textContent='이번 추첨 대상은 아니었어요.';
@@ -413,6 +414,7 @@ var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
       }
       prizeText.appendChild(head);
       if(sub.textContent) prizeText.appendChild(sub);
+      if(sub2) prizeText.appendChild(sub2);
     }
 
     $('progress-fill').style.width = pct + '%';
